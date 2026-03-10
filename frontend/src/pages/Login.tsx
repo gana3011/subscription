@@ -1,11 +1,22 @@
+import axios from "axios";
 import { useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/auth/login", {
+        email: email,
+        password: password,
+      });
+
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

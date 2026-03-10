@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from database import get_db
 from services import auth_service
 from schema.UserSchema import CreateUser, LoginUser
@@ -15,5 +15,16 @@ def create_user(db: db_dependency, user_req: CreateUser):
     return auth_service.create_user(db, user_req)
 
 @router.post("/login")
-def login_user(db: db_dependency, user_req: LoginUser):
-    return auth_service.login_user(db, user_req)
+def login_user(response: Response, db: db_dependency, user_req: LoginUser):
+    token = auth_service.login_user(db, user_req)
+    
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=1800 
+    )
+
+    return {"message": "Login successfull"}

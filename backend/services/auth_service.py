@@ -37,4 +37,4 @@ def login_user(db: Session, user_req: LoginUser):
     
     token = create_access_token(user_req.email, user.id, timedelta(minutes=30))
 
-    return {"access_token": token}
+    return token

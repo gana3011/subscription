@@ -35,6 +35,9 @@ def login_user(db: Session, user_req: LoginUser):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User creditionals wrong")
     
-    token = create_access_token(user_req.email, user.id, timedelta(minutes=30))
+    token = create_access_token(user.id, user.role, timedelta(minutes=30))
 
-    return token
+    return {
+    "access_token": token,
+    "token_type": "bearer"
+    }

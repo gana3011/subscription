@@ -20,7 +20,7 @@ def login_user(response: Response, db: db_dependency, user_req: LoginUser):
     
     response.set_cookie(
         key="access_token",
-        value=token,
+        value=token["access_token"],
         httponly=True,
         secure=False,
         samesite="lax",

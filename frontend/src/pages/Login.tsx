@@ -1,26 +1,25 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import API from "../services/api";
 import "../styles/auth.css";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const { login } = useAuth();
+
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/auth/login", {
-        email: email,
-        password: password,
-      });
 
-      console.log(response.data);
+    try {
+      await login(email, password);
+      navigate("/dashboard");
     } catch (err) {
-      console.log(err);
+      setError("Invalid credentials");
     }
   };
 

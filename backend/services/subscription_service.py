@@ -1,6 +1,8 @@
 from datetime import date, timedelta
+from operator import sub
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from schema.SubscriptionSchema import SubscriptionResponse
 from models.subscription import Subscription
 from repository import plan_repository, subscription_repository
 
@@ -45,5 +47,18 @@ def change_subscription(db: Session, plan_id: int, user_id: int):
 
     return create_subscription(db, user_id, plan_id)
 
+def active_subscription(db: Session, user_id: int):
+    active_subscription = subscription_repository.get_active_subscription(db, user_id)
+    plan = plan_repository.get_plan_by_id(db, active_subscription.plan_id)
+    return SubscriptionResponse(
+        subscription_id=active_subscription.id,
+        plan_id=plan.id,
+        user_id=active_subscription.user_id,
+        name=plan.name,
+        price=plan.price,
+        start_date=active_subscription.start_date,
+        end_date=active_subscription.end_date
+    )
+    
 def revenue_report(db: Session):
     return subscription_repository.revenue_summary(db)

@@ -26,6 +26,11 @@ def cancel_subcription(sub_id:int, user: user_dependency, db: db_dependency):
 def change_subscription(plan_id, user: user_dependency, db: db_dependency):
     return subscription_service.change_subscription(db, user["user_id"], plan_id)
 
+@router.get("/active-subscription")
+def get_active_subscription(user: user_dependency, db: db_dependency):
+    return subscription_service.active_subscription(db, user["user_id"])
+
 @router.get("/revenue-report")
 def get_revenue_report(admin: admin_dependecy, db: db_dependency):
     return subscription_service.revenue_report(db)
+

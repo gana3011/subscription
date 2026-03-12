@@ -1,9 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import API from "../services/api";
+import "../styles/auth.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,65 +25,39 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2>Login</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Welcome Back</h2>
+        <p className="subtitle">Login to your account</p>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        <form onSubmit={handleSubmit}>
           <input
             type="email"
-            placeholder="Email"
-            style={styles.input}
+            placeholder="Email address"
+            value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
             type="password"
             placeholder="Password"
-            style={styles.input}
+            value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button style={styles.button}>Login</button>
+          <button type="submit">Login</button>
         </form>
+
+        <p className="switch">
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
       </div>
     </div>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    background: "#f5f5f5",
-  },
-  card: {
-    background: "white",
-    padding: "30px",
-    borderRadius: "8px",
-    width: "300px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  input: {
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  button: {
-    padding: "10px",
-    background: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
 };
 
 export default Login;

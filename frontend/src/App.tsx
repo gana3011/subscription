@@ -1,15 +1,46 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Plans from "./pages/Plans";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import MovieDetails from "./pages/MovieDetails";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
+
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/plans" element={<Plans />} />
+        <Route path="/" element={<Home />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/signup" element={<Signup />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/movie/:id" element={<MovieDetails />} />
       </Routes>
     </BrowserRouter>
   );

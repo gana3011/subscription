@@ -1,0 +1,26 @@
+.details-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.poster {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.details {
+  max-width: 600px;
+}
+
+.watch-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

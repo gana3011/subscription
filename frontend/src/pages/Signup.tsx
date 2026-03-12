@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import API from "../services/api";
 import "../styles/auth.css";
+import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -9,6 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,14 +18,8 @@ const Signup = () => {
     setError("");
 
     try {
-      await API.post("/auth/register", {
-        name,
-        email,
-        password,
-      });
-
+      await signup(name, email, password);
       alert("Account created successfully!");
-
       navigate("/login");
     } catch (err) {
       setError("Signup failed. Try again.");

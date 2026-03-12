@@ -25,6 +25,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
+  const signup = async (name: string, email: string, password: string) => {
+    const res = await API.post(
+      "/auth/signup",
+      { name, email, password },
+      { withCredentials: true },
+    );
+
+    return res.data;
+  };
+
   const login = async (email: string, password: string) => {
     await API.post(
       "/auth/login",
@@ -43,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, signup, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

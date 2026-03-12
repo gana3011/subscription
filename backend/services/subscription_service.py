@@ -44,3 +44,6 @@ def change_subscription(db: Session, plan_id: int, user_id: int):
         subscription_repository.cancel_subscription(db, active_subscription)
 
     return create_subscription(db, user_id, plan_id)
+
+def revenue_report(db: Session):
+    return subscription_repository.revenue_summary(db)

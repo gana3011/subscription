@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException, Response, status
 from utils.jwt import authenticate_user, create_access_token
 from models.user import User
 from repository import auth_repository
@@ -40,3 +40,7 @@ def login_user(db: Session, user_req: LoginUser):
     return {
     "access_token": token,
     }
+
+def logout_user(response: Response):
+    response.delete_cookie("access_token")
+    return {"message": "User logged out"}

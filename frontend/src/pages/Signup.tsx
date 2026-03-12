@@ -20,28 +20,31 @@ const Signup = () => {
       await signup(name, email, password);
       alert("Account created successfully!");
       navigate("/login");
-    } catch (err) {
+    } catch {
       setError("Signup failed. Try again.");
     }
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center p-5">
-      <div className="bg-white p-10 rounded-lg w-full max-w-[420px] border border-gray-200 shadow-md text-center">
-        <h2 className="mb-2 text-xl font-semibold">Create Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200 p-10 flex flex-col items-center gap-6">
+        <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
 
-        <p className="text-gray-500 text-sm mb-6">Sign up to get started</p>
+        <p className="text-gray-500 text-base">Sign up to get started</p>
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center gap-6 w-full"
+        >
           <input
             type="text"
             placeholder="Full Name"
             value={name}
             required
             onChange={(e) => setName(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
+            className="w-[90%] py-4 px-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           <input
@@ -50,7 +53,7 @@ const Signup = () => {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
+            className="w-[90%] py-4 px-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           <input
@@ -59,20 +62,23 @@ const Signup = () => {
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
+            className="w-[90%] py-4 px-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           <button
             type="submit"
-            className="p-3 bg-black text-white rounded-md hover:opacity-90"
+            className="w-[90%] py-4 bg-black text-white rounded-md text-base font-semibold hover:bg-gray-900 transition"
           >
             Create Account
           </button>
         </form>
 
-        <p className="mt-5 text-sm">
+        <p className="text-sm text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-black font-medium">
+          <Link
+            to="/login"
+            className="font-semibold text-black hover:underline"
+          >
             Login
           </Link>
         </p>

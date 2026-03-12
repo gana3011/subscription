@@ -19,8 +19,8 @@ const Navbar = () => {
             Dashboard
           </Link>
 
-          <Link to="/profile" style={{ marginLeft: "10px" }}>
-            Profile
+          <Link to="/plans" style={{ marginLeft: "10px" }}>
+            Plans
           </Link>
 
           <button

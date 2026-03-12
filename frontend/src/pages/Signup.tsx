@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/auth.css";
 import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
@@ -27,20 +26,22 @@ const Signup = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Create Account</h2>
-        <p className="subtitle">Sign up to get started</p>
+    <div className="w-full min-h-screen flex justify-center items-center p-5">
+      <div className="bg-white p-10 rounded-lg w-full max-w-[420px] border border-gray-200 shadow-md text-center">
+        <h2 className="mb-2 text-xl font-semibold">Create Account</h2>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <p className="text-gray-500 text-sm mb-6">Sign up to get started</p>
 
-        <form onSubmit={handleSubmit}>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="Full Name"
             value={name}
             required
             onChange={(e) => setName(e.target.value)}
+            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
           />
 
           <input
@@ -49,6 +50,7 @@ const Signup = () => {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
+            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
           />
 
           <input
@@ -57,13 +59,22 @@ const Signup = () => {
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
+            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
           />
 
-          <button type="submit">Create Account</button>
+          <button
+            type="submit"
+            className="p-3 bg-black text-white rounded-md hover:opacity-90"
+          >
+            Create Account
+          </button>
         </form>
 
-        <p className="switch">
-          Already have an account? <Link to="/login">Login</Link>
+        <p className="mt-5 text-sm">
+          Already have an account?{" "}
+          <Link to="/login" className="text-black font-medium">
+            Login
+          </Link>
         </p>
       </div>
     </div>

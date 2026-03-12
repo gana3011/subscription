@@ -1,65 +1,43 @@
 import { Link } from "react-router-dom";
 import { movies } from "../data/movies";
-import "../styles/home.css";
 
 const Home = () => {
   return (
-    <div style={{ padding: "30px" }}>
-      <h1>Movie Library</h1>
+    <div className="p-10 max-w-[1200px] mx-auto">
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
+      <h1 className="text-3xl font-bold">Movie Library</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+
         {movies.map((movie) => (
           <div
             key={movie.id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              overflow: "hidden",
-              textAlign: "center",
-              paddingBottom: "15px",
-            }}
+            className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm text-center pb-4"
           >
             <Link
               to={`/movie/${movie.id}`}
-              style={{ textDecoration: "none", color: "black" }}
+              className="text-black no-underline"
             >
               <img
                 src={movie.image}
                 alt={movie.title}
-                style={{
-                  width: "100%",
-                  height: "280px",
-                  objectFit: "cover",
-                }}
+                className="w-full h-[300px] object-cover"
               />
 
-              <h3 style={{ marginTop: "10px" }}>{movie.title}</h3>
+              <h3 className="mt-3 font-semibold">
+                {movie.title}
+              </h3>
             </Link>
 
             <Link to={`/movie/${movie.id}`}>
-              <button
-                style={{
-                  marginTop: "10px",
-                  padding: "8px 15px",
-                  border: "none",
-                  background: "black",
-                  color: "white",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
+              <button className="mt-2 px-4 py-2 bg-black text-white rounded hover:opacity-90">
                 Watch Now
               </button>
             </Link>
+
           </div>
         ))}
+
       </div>
     </div>
   );

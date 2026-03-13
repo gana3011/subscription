@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Plan } from "../types/Plan";
 import { useSubscription } from "../context/SubscriptionContext";
+import { useAuth } from "../context/AuthContext";
 
 const Plans = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { getAllPlans, subscribePlan, getCurrentPlan, changeSubscription } =
     useSubscription();
   const [plans, setPlans] = useState<Plan[] | null>(null);
@@ -36,6 +38,8 @@ const Plans = () => {
     try {
       if (!activePlanId) await subscribePlan(plan_id);
       else await changeSubscription(plan_id);
+
+      alert("Subscribed successfully");
       navigate("/dashboard");
     } catch (err) {
       alert("Error subscribing to plan");

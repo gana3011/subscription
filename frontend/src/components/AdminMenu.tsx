@@ -7,7 +7,6 @@ const AdminMenu = () => {
 
   return (
     <div className="relative">
-      {/* Admin Button */}
       <button
         onClick={() => setOpen(!open)}
         className="px-4 py-2 bg-black text-white rounded-md"
@@ -15,7 +14,6 @@ const AdminMenu = () => {
         Admin
       </button>
 
-      {/* Dropdown */}
       {open && (
         <div className="absolute right-0 mt-2 w-[180px] bg-white border rounded-md shadow-md">
           <button

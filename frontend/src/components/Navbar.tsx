@@ -4,10 +4,8 @@ import { useAuth } from "../context/AuthContext";
 const Navbar = () => {
   const { logout, user } = useAuth();
 
-  // fallback check using token
-  const token = localStorage.getItem("token");
-
-  const isAuthenticated = user || token;
+  const isAuthenticated = !!user;
+  const isAdmin = user?.role === "admin";
 
   return (
     <nav style={{ padding: "15px", borderBottom: "1px solid #ddd" }}>
@@ -15,13 +13,27 @@ const Navbar = () => {
 
       {isAuthenticated ? (
         <>
-          <Link to="/dashboard" style={{ marginLeft: "10px" }}>
-            Dashboard
-          </Link>
+          {isAdmin ? (
+            <>
+              <Link to="/admin/plans" style={{ marginLeft: "10px" }}>
+                Plans
+              </Link>
 
-          <Link to="/plans" style={{ marginLeft: "10px" }}>
-            Plans
-          </Link>
+              <Link to="/admin/revenue" style={{ marginLeft: "10px" }}>
+                Report
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/dashboard" style={{ marginLeft: "10px" }}>
+                Dashboard
+              </Link>
+
+              <Link to="/plans" style={{ marginLeft: "10px" }}>
+                Plans
+              </Link>
+            </>
+          )}
 
           <button
             onClick={logout}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import API from "../../services/api";
 import type { RevenueReportData } from "../../types/Revenue";
 import { useSubscription } from "../../context/SubscriptionContext";
 

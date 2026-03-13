@@ -12,7 +12,7 @@ type AuthContextType = {
   user: User | null;
   loading: boolean;
   signup: (name: string, email: string, password: string) => Promise<any>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
 };
 
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const res = await API.get("/auth/me", { withCredentials: true });
     setUser(res.data);
-    console.log("login success");
+    return res.data;
   };
 
   const logout = async () => {

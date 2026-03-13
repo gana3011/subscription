@@ -3,9 +3,8 @@ import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  const token = localStorage.getItem("token");
 
-  if (!user && !token) {
+  if (!user) {
     return <Navigate to="/login" />;
   }
 

@@ -66,7 +66,7 @@ const Plans = () => {
               </p>
 
               <p className="text-center text-gray-500 mb-4">
-                {plan?.duration_days} days
+                Duration: {plan?.duration_days / 30} months
               </p>
 
               <p className="text-center text-gray-500 mb-4">

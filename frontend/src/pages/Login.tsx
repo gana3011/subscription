@@ -14,8 +14,9 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      await login(email, password);
-      navigate("/dashboard");
+      const user = await login(email, password);
+      if (user.role == "admin") navigate("/admin/plans");
+      else navigate("/dashboard");
     } catch {
       setError("Invalid credentials");
     }
@@ -23,7 +24,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
-      {/* Card */}
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200 p-10 flex flex-col items-center gap-6">
         <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
 

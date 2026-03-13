@@ -6,7 +6,8 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import MovieDetails from "./pages/MovieDetails";
 import Plans from "./pages/Plans";
-
+import AdminPlans from "./pages/admin/AdminPlans";
+import RevenueReport from "./pages/admin/RevenueReport";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 
@@ -29,6 +30,24 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/plans"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminPlans />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/revenue"
+          element={
+            <ProtectedRoute role="admin">
+              <RevenueReport />
             </ProtectedRoute>
           }
         />

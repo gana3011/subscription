@@ -63,7 +63,7 @@ def active_subscription(db: Session, user_id: int):
         )
 
     return SubscriptionResponse(
-        subscription_id=subscription.id,
+        id=subscription.id,
         plan_id=plan.id,
         user_id=subscription.user_id,
         name=plan.name,

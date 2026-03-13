@@ -4,9 +4,23 @@ import type { Subscription } from "../types/Subscription";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
-  const { getCurrentPlan } = useSubscription();
+  const { getCurrentPlan, cancelSubscription } = useSubscription();
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const handleCancel = async () => {
+    if (!subscription) return;
+
+    try {
+      console.log("in cancel");
+      if (confirm("Are you sure you want to cancel your subscription?")) {
+        await cancelSubscription(subscription.id);
+      }
+      setSubscription(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const fetchActivePlan = async () => {
@@ -22,10 +36,6 @@ const Dashboard = () => {
 
     fetchActivePlan();
   }, [getCurrentPlan]);
-
-  useEffect(() => {
-    console.log(subscription);
-  }, [subscription]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -60,8 +70,8 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm">
           <h3 className="mb-2 font-semibold">Current Plan</h3>
-          <p className="text-xl font-bold">{subscription?.name}</p>
-          <p>${subscription?.price}</p>
+          <p className="text-xl font-bold">{subscription.name}</p>
+          <p>${subscription.price}</p>
 
           <h3 className="mb-2 font-semibold">Start Date</h3>
 
@@ -71,16 +81,17 @@ const Dashboard = () => {
         <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm">
           <h3 className="mb-2 font-semibold">Next Billing</h3>
           <p>{new Date(subscription.end_date).toLocaleDateString()}</p>
-        </div>
-
-        <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm">
-          <h3 className="mb-2 font-semibold">Upgrade Plan</h3>
-
           <Link to={"/plans"}>
             <button className="mt-3 px-4 py-2 bg-black text-white rounded-md hover:opacity-90">
               Upgrade
             </button>
           </Link>
+          <button
+            className="mt-3 px-4 py-2 bg-red-800 text-white rounded-md hover:opacity-90"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

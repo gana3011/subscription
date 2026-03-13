@@ -41,3 +41,9 @@ def delete_plan(db: Session, id: int):
         raise HTTPException(status_code=404, detail="Plan not found")
     
     plan_repository.delete_plan(db, plan)
+
+def get_movies(db: Session):
+    return plan_repository.get_movies(db)
+
+def get_movie_by_id(db: Session, movie_id: int):
+    return plan_repository.get_movie_by_id(db, movie_id)

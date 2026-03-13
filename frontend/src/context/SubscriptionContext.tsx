@@ -2,6 +2,8 @@ import { createContext, useContext } from "react";
 import API from "../services/api";
 
 interface SubscriptionContextType {
+  getMovies: () => Promise<any>;
+  getMovie: (movie_id: number) => Promise<any>;
   getCurrentPlan: () => Promise<any>;
   getAllPlans: () => Promise<any>;
   subscribePlan: (plan_id: number) => Promise<any>;
@@ -15,6 +17,25 @@ export const SubscriptionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const getMovies = async () => {
+    try {
+      const res = await API.get("/plans/get-movies", { withCredentials: true });
+
+      return res.data;
+    } catch (error: any) {
+      console.error("Error fetching current subscription:", error);
+    }
+  };
+
+  const getMovie = async (movie_id: number) => {
+    try {
+      const res = await API.get(`/plans/movies/${movie_id}`);
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching movie", error);
+    }
+  };
+
   const getCurrentPlan = async () => {
     try {
       const res = await API.get("/subscriptions/active-subscription", {
@@ -69,7 +90,14 @@ export const SubscriptionProvider = ({
 
   return (
     <SubscriptionContext.Provider
-      value={{ getCurrentPlan, getAllPlans, subscribePlan, changePlan }}
+      value={{
+        getCurrentPlan,
+        getAllPlans,
+        subscribePlan,
+        changePlan,
+        getMovies,
+        getMovie,
+      }}
     >
       {children}
     </SubscriptionContext.Provider>

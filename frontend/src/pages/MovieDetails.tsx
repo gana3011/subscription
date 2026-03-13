@@ -1,45 +1,62 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { movies } from "../data/movies";
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import { useSubscription } from "../context/SubscriptionContext";
+
+interface Movie {
+  id: number;
+  title: string;
+  director: string;
+  cast: string;
+  genre: string;
+  image: string;
+  description?: string;
+  rating?: number;
+  plan_id: number;
+}
 
 const MovieDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getMovie, getCurrentPlan } = useSubscription();
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [userPlanId, setUserPlanId] = useState<number | null>(null);
 
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const fetchMovie = async (movie_id: number) => {
+    try {
+      const res = await getMovie(movie_id);
+      console.log(res);
+      setMovie(res);
+    } catch (err) {
+      setMovie(null);
+    }
+  };
 
-  const movie = movies.find((m) => m.id === Number(id));
+  const fetchCurrentPlan = async () => {
+    try {
+      const res = await getCurrentPlan();
+      setUserPlanId(res.plan_id);
+    } catch (error) {
+      console.log("User not subscribed");
+    }
+  };
 
   useEffect(() => {
-    const checkSubscription = async () => {
-      try {
-        const res = await API.get("/subscriptions/me");
-        if (res.data.status === "active") {
-          setIsSubscribed(true);
-        }
-      } catch (error) {
-        console.log("User not subscribed");
-      }
-    };
-
-    checkSubscription();
-  }, []);
+    if (id) {
+      fetchMovie(Number(id));
+      fetchCurrentPlan();
+    }
+  }, [id]);
 
   if (!movie) {
     return <h2 className="text-center text-xl mt-10">Movie not found</h2>;
   }
 
-  const handleWatch = () => {
-    // BASIC PLAN → always allow
-    if (movie.plan === "basic") {
-      alert("Playing movie...");
-      return;
-    }
+  const canWatch = userPlanId !== null && userPlanId >= movie.plan_id;
 
-    // STANDARD / PREMIUM → require subscription
-    if (!isSubscribed) {
-      alert("You must subscribe to watch this movie");
+  const handleWatch = () => {
+    if (!canWatch) {
+      alert("Your subscription plan does not allow this movie");
       navigate("/dashboard");
       return;
     }
@@ -66,16 +83,13 @@ const MovieDetails = () => {
           <b>Genre:</b> {movie.genre}
         </p>
 
-        <p className="mt-3">
-          <b>Description:</b> {movie.description}
-        </p>
+        {movie.description && (
+          <p className="mt-3">
+            <b>Description:</b> {movie.description}
+          </p>
+        )}
 
-        <p className="mt-2">
-          <b>Rating:</b> ⭐ {movie.rating}
-        </p>
-
-        {/* BUTTON LOGIC */}
-        {movie.plan === "basic" || isSubscribed ? (
+        {canWatch ? (
           <button
             className="mt-4 px-5 py-2 bg-black text-white rounded-md hover:opacity-90"
             onClick={handleWatch}
@@ -85,24 +99,17 @@ const MovieDetails = () => {
         ) : (
           <button
             className="mt-4 px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/plans")}
           >
-            Subscribe to Watch
+            Upgrade Plan
           </button>
         )}
 
-        {/* MESSAGE ONLY FOR STANDARD / PREMIUM */}
-        {movie.plan !== "basic" && !isSubscribed && (
+        {!canWatch && (
           <p className="text-red-500 mt-2">
-            Subscription required to watch this movie
+            Your current subscription does not include this movie
           </p>
         )}
-
-        <h3 className="mt-6 text-lg font-semibold">Comments</h3>
-
-        {movie.comments.map((c, i) => (
-          <p key={i}>• {c}</p>
-        ))}
       </div>
     </div>
   );

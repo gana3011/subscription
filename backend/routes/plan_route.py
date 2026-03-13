@@ -30,3 +30,11 @@ def update_plan(id: int, admin: admin_dependecy, db: db_dependency, plan_req: Pl
 def update_plan(id: int, admin: admin_dependecy, db: db_dependency):
     plan_service.delete_plan(db, id)
     return {"message": "Plan deleted successfully"}
+
+@router.get("/get-movies")
+def get_movies(db: db_dependency):
+    return plan_service.get_movies(db)
+
+@router.get("/movies/{movie_id}")
+def get_movie(movie_id: int, db: Session = Depends(get_db)):
+    return plan_service.get_movie_by_id(db, movie_id)

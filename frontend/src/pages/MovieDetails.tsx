@@ -31,6 +31,13 @@ const MovieDetails = () => {
   }
 
   const handleWatch = () => {
+    // BASIC PLAN → always allow
+    if (movie.plan === "basic") {
+      alert("Playing movie...");
+      return;
+    }
+
+    // STANDARD / PREMIUM → require subscription
     if (!isSubscribed) {
       alert("You must subscribe to watch this movie");
       navigate("/dashboard");
@@ -50,27 +57,42 @@ const MovieDetails = () => {
         <p>
           <b>Director:</b> {movie.director}
         </p>
+
         <p>
           <b>Cast:</b> {movie.cast}
         </p>
+
         <p>
           <b>Genre:</b> {movie.genre}
         </p>
+
         <p className="mt-3">
           <b>Description:</b> {movie.description}
         </p>
+
         <p className="mt-2">
           <b>Rating:</b> ⭐ {movie.rating}
         </p>
 
-        <button
-          className="mt-4 px-5 py-2 bg-black text-white rounded-md hover:opacity-90"
-          onClick={handleWatch}
-        >
-          Watch
-        </button>
+        {/* BUTTON LOGIC */}
+        {movie.plan === "basic" || isSubscribed ? (
+          <button
+            className="mt-4 px-5 py-2 bg-black text-white rounded-md hover:opacity-90"
+            onClick={handleWatch}
+          >
+            Watch
+          </button>
+        ) : (
+          <button
+            className="mt-4 px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            onClick={() => navigate("/dashboard")}
+          >
+            Subscribe to Watch
+          </button>
+        )}
 
-        {!isSubscribed && (
+        {/* MESSAGE ONLY FOR STANDARD / PREMIUM */}
+        {movie.plan !== "basic" && !isSubscribed && (
           <p className="text-red-500 mt-2">
             Subscription required to watch this movie
           </p>

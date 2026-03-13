@@ -2,7 +2,7 @@ from models.plan import Plan
 from sqlalchemy.orm import Session
 
 def get_plans(db: Session):
-    return db.query(Plan).all()
+    return db.query(Plan).order_by(Plan.price).all()
 
 def get_plan_by_id(db: Session, id: int):
     return db.query(Plan).filter(Plan.id == id).first()

@@ -22,22 +22,26 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center p-5">
-      <div className="bg-white p-10 rounded-lg w-full max-w-[420px] border border-gray-200 shadow-md text-center">
-        <h2 className="mb-2 text-xl font-semibold">Welcome Back</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+      {/* Card */}
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200 p-10 flex flex-col items-center gap-6">
+        <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
 
-        <p className="text-gray-500 text-sm mb-6">Login to your account</p>
+        <p className="text-gray-500 text-base">Login to your account</p>
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center gap-6 w-full"
+        >
           <input
             type="email"
             placeholder="Email address"
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
+            className="w-[90%] py-4 px-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           <input
@@ -46,20 +50,23 @@ const Login = () => {
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-gray-500"
+            className="w-[90%] py-4 px-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           <button
             type="submit"
-            className="p-3 bg-black text-white rounded-md hover:opacity-90"
+            className="w-[90%] py-4 bg-black text-white rounded-md text-base font-semibold hover:bg-gray-900 transition"
           >
             Login
           </button>
         </form>
 
-        <p className="mt-5 text-sm">
+        <p className="text-sm text-gray-600">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-black font-medium">
+          <Link
+            to="/signup"
+            className="font-semibold text-black hover:underline"
+          >
             Sign Up
           </Link>
         </p>

@@ -1,96 +1,96 @@
 import { useEffect, useState } from "react";
-import API from "../services/api";
-
-interface Plan {
-  id: number;
-  name: string;
-  price: number;
-}
+import { useNavigate } from "react-router-dom";
+import type { Plan } from "../types/Plan";
+import { useSubscription } from "../context/SubscriptionContext";
 
 const Plans = () => {
-  const [plans, setPlans] = useState<Plan[]>([]);
-
-  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const { getAllPlans, subscribePlan, getCurrentPlan, changePlan } =
+    useSubscription();
+  const [plans, setPlans] = useState<Plan[] | null>(null);
+  const [activePlanId, setActivePlanId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPlans = async () => {
+    const fetchAllPlans = async () => {
       try {
-        const response = await API.get("/plans", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setPlans(response.data);
-      } catch (error) {
-        console.log(error);
+        const res = await getAllPlans();
+        const activePlan = await getCurrentPlan();
+        setPlans(res);
+        setActivePlanId(activePlan.plan_id);
+      } catch (err) {
+        console.error("Failed to fetch subscription", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchPlans();
-  }, []);
+    fetchAllPlans();
+  }, [getAllPlans]);
 
-  const subscribePlan = async (planId: number) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const handleClick = async (plan_id: number) => {
     try {
-      await API.post(
-        `/subscribe/${planId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      alert("Subscribed successfully");
-    } catch (error) {
-      console.log(error);
-      alert("Subscription failed");
+      if (!activePlanId) await subscribePlan(plan_id);
+      else await changePlan(plan_id);
+      navigate("/dashboard");
+    } catch (err) {
+      alert("Error subscribing to plan");
     }
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2 style={{ textAlign: "center" }}>Subscription Plans</h2>
+    <div className="min-h-screen bg-gray-200 p-10">
+      <h1 className="text-4xl font-bold text-center mb-10">
+        Choose Your Subscription Plan
+      </h1>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "20px",
-          justifyContent: "center",
-          marginTop: "30px",
-        }}
-      >
-        {plans.map((plan) => (
-          <div
-            key={plan.id}
-            style={{
-              border: "1px solid #ddd",
-              padding: "20px",
-              borderRadius: "8px",
-              width: "200px",
-              textAlign: "center",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h3>{plan.name}</h3>
-            <p>${plan.price}</p>
+      <div className="flex flex-wrap justify-center gap-8">
+        {plans?.map((plan) => {
+          const isActive = plan.id === activePlanId;
 
-            <button
-              onClick={() => subscribePlan(plan.id)}
-              style={{
-                background: "#007bff",
-                color: "white",
-                border: "none",
-                padding: "8px 12px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+          return (
+            <div
+              key={plan.id}
+              className="bg-white w-[300px] p-6 rounded-lg shadow-md border"
             >
-              Subscribe
-            </button>
-          </div>
-        ))}
+              <h2 className="text-2xl font-semibold text-center mb-4">
+                {plan?.name}
+              </h2>
+
+              <p className="text-center text-3xl font-bold mb-2">
+                Rs {plan.price}
+              </p>
+
+              <p className="text-center text-gray-500 mb-4">
+                {plan?.duration_days} days
+              </p>
+
+              <p className="text-center text-gray-500 mb-4">
+                {plan?.description}
+              </p>
+
+              {isActive ? (
+                <button
+                  disabled
+                  className="w-full bg-green-500 text-white py-2 rounded-md cursor-not-allowed"
+                >
+                  Subscribed
+                </button>
+              ) : (
+                <button
+                  className="w-full bg-black text-white py-2 rounded-md hover:opacity-90"
+                  onClick={() => handleClick(plan.id)}
+                >
+                  Subscribe
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

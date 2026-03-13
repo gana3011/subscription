@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from models import movie
 from database import Base, engine
 from routes import auth_route, plan_route, subscription_route
 from fastapi.middleware.cors import CORSMiddleware

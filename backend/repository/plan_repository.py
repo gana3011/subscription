@@ -1,3 +1,4 @@
+from models.movie import Movie
 from models.plan import Plan
 from sqlalchemy.orm import Session
 
@@ -22,3 +23,9 @@ def save_plan(db: Session, plan: Plan):
 def delete_plan(db: Session, plan: Plan):
     db.delete(plan)
     db.commit()
+
+def get_movies(db: Session):
+    return db.query(Movie).all()
+
+def get_movie_by_id(db: Session, movie_id: int):
+    return db.query(Movie).filter(Movie.id == movie_id).first()

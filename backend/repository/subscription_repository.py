@@ -43,5 +43,8 @@ def revenue_summary(db: Session):
         "expired_subscriptions": expired_count,
         "cancelled_subscriptions": cancelled_count,
         "total_subscriptions": total_count,
-        "revenue_per_plan": {name: revenue for name, revenue in revenue_per_plan}
+        "revenue_per_plan": [
+        {"plan_name": name, "revenue": revenue}
+        for name, revenue in revenue_per_plan
+    ]
     }

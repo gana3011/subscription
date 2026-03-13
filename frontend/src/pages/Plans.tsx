@@ -5,7 +5,7 @@ import { useSubscription } from "../context/SubscriptionContext";
 
 const Plans = () => {
   const navigate = useNavigate();
-  const { getAllPlans, subscribePlan, getCurrentPlan, changePlan } =
+  const { getAllPlans, subscribePlan, getCurrentPlan, changeSubscription } =
     useSubscription();
   const [plans, setPlans] = useState<Plan[] | null>(null);
   const [activePlanId, setActivePlanId] = useState<number | null>(null);
@@ -35,7 +35,7 @@ const Plans = () => {
   const handleClick = async (plan_id: number) => {
     try {
       if (!activePlanId) await subscribePlan(plan_id);
-      else await changePlan(plan_id);
+      else await changeSubscription(plan_id);
       navigate("/dashboard");
     } catch (err) {
       alert("Error subscribing to plan");

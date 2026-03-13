@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from operator import sub
+from tkinter import S
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from schema.SubscriptionSchema import SubscriptionResponse
@@ -39,7 +40,7 @@ def cancel_subscription(db: Session, sub_id: int):
     return subscription_repository.cancel_subscription(db, subscription)
 
 
-def change_subscription(db: Session, plan_id: int, user_id: int):
+def change_subscription(db: Session, user_id: int, plan_id: int):
     active_subscription = subscription_repository.get_active_subscription(db, user_id)
 
     if active_subscription:
@@ -48,16 +49,27 @@ def change_subscription(db: Session, plan_id: int, user_id: int):
     return create_subscription(db, user_id, plan_id)
 
 def active_subscription(db: Session, user_id: int):
-    active_subscription = subscription_repository.get_active_subscription(db, user_id)
-    plan = plan_repository.get_plan_by_id(db, active_subscription.plan_id)
+    subscription = subscription_repository.get_active_subscription(db, user_id)
+
+    if not subscription:
+        return None
+
+    plan = plan_repository.get_plan_by_id(db, subscription.plan_id)
+
+    if not plan:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Plan associated with subscription not found"
+        )
+
     return SubscriptionResponse(
-        subscription_id=active_subscription.id,
+        subscription_id=subscription.id,
         plan_id=plan.id,
-        user_id=active_subscription.user_id,
+        user_id=subscription.user_id,
         name=plan.name,
         price=plan.price,
-        start_date=active_subscription.start_date,
-        end_date=active_subscription.end_date
+        start_date=subscription.start_date,
+        end_date=subscription.end_date
     )
     
 def revenue_report(db: Session):

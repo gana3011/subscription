@@ -1,133 +1,156 @@
 import { useEffect, useState } from "react";
-import API from "../../services/api";
-
-interface Plan {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  duration_days: number;
-}
+import type { Plan } from "../../types/Plan";
+import { useSubscription } from "../../context/SubscriptionContext";
 
 const AdminPlans = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
+  const { getAllPlans, updatePlan } = useSubscription();
 
   useEffect(() => {
     fetchPlans();
   }, []);
 
   const fetchPlans = async () => {
-    const res = await API.get("/admin/plans");
-    setPlans(res.data);
+    try {
+      const res = await getAllPlans();
+      setPlans(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleUpdate = async () => {
     if (!editingPlan) return;
-
-    await API.put(`/admin/plans/${editingPlan.id}`, editingPlan);
-
-    setEditingPlan(null);
+    try {
+      await updatePlan(editingPlan);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setEditingPlan(null);
+    }
     fetchPlans();
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 p-10">
+    <div className="min-h-screen bg-gray-100 p-10">
       <h1 className="text-3xl font-bold mb-8">Admin - Manage Plans</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {plans.map((plan) => (
-          <div key={plan.id} className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-2">{plan.name}</h2>
+      <div className="grid grid-cols-2 gap-10">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Plans</h2>
 
-            <p>
-              <b>Price:</b> ₹{plan.price}
-            </p>
+          <table className="w-full">
+            <thead>
+              <tr className="border-b text-left">
+                <th className="py-2">Name</th>
+                <th>Price</th>
+                <th>Duration</th>
+                <th></th>
+              </tr>
+            </thead>
 
-            <p>
-              <b>Duration:</b> {plan.duration_days} days
-            </p>
+            <tbody>
+              {plans.map((plan) => (
+                <tr key={plan.id} className="border-b">
+                  <td className="py-3">{plan.name}</td>
 
-            <p className="mt-2 text-gray-600">{plan.description}</p>
+                  <td>₹{plan.price}</td>
 
-            <button
-              className="mt-4 px-4 py-2 bg-black text-white rounded-md"
-              onClick={() => setEditingPlan(plan)}
-            >
-              Edit
-            </button>
-          </div>
-        ))}
-      </div>
+                  <td>{plan.duration_days} days</td>
 
-      {/* EDIT MODAL */}
-
-      {editingPlan && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40">
-          <div className="bg-white p-6 rounded-lg w-[400px]">
-            <h2 className="text-xl font-bold mb-4">Edit Plan</h2>
-
-            <input
-              className="border p-2 w-full mb-3"
-              value={editingPlan.name}
-              onChange={(e) =>
-                setEditingPlan({ ...editingPlan, name: e.target.value })
-              }
-            />
-
-            <input
-              className="border p-2 w-full mb-3"
-              type="number"
-              value={editingPlan.price}
-              onChange={(e) =>
-                setEditingPlan({
-                  ...editingPlan,
-                  price: Number(e.target.value),
-                })
-              }
-            />
-
-            <input
-              className="border p-2 w-full mb-3"
-              type="number"
-              value={editingPlan.duration_days}
-              onChange={(e) =>
-                setEditingPlan({
-                  ...editingPlan,
-                  duration_days: Number(e.target.value),
-                })
-              }
-            />
-
-            <textarea
-              className="border p-2 w-full mb-3"
-              value={editingPlan.description}
-              onChange={(e) =>
-                setEditingPlan({
-                  ...editingPlan,
-                  description: e.target.value,
-                })
-              }
-            />
-
-            <div className="flex justify-end gap-3">
-              <button
-                className="px-4 py-2 bg-gray-400 rounded"
-                onClick={() => setEditingPlan(null)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className="px-4 py-2 bg-black text-white rounded"
-                onClick={handleUpdate}
-              >
-                Save
-              </button>
-            </div>
-          </div>
+                  <td>
+                    <button
+                      className="px-3 py-1 bg-black text-white rounded text-sm"
+                      onClick={() => setEditingPlan(plan)}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">
+            {editingPlan ? "Edit Plan" : "Select a Plan"}
+          </h2>
+
+          {editingPlan ? (
+            <>
+              <label className="text-sm text-gray-600">Name</label>
+              <input
+                className="border p-2 w-full mb-4 rounded"
+                value={editingPlan.name}
+                onChange={(e) =>
+                  setEditingPlan({
+                    ...editingPlan,
+                    name: e.target.value,
+                  })
+                }
+              />
+
+              <label className="text-sm text-gray-600">Price</label>
+              <input
+                className="border p-2 w-full mb-4 rounded"
+                type="number"
+                value={editingPlan.price}
+                onChange={(e) =>
+                  setEditingPlan({
+                    ...editingPlan,
+                    price: Number(e.target.value),
+                  })
+                }
+              />
+
+              <label className="text-sm text-gray-600">Duration (days)</label>
+              <input
+                className="border p-2 w-full mb-4 rounded"
+                type="number"
+                value={editingPlan.duration_days}
+                onChange={(e) =>
+                  setEditingPlan({
+                    ...editingPlan,
+                    duration_days: Number(e.target.value),
+                  })
+                }
+              />
+
+              <label className="text-sm text-gray-600">Description</label>
+              <textarea
+                className="border p-2 w-full mb-6 rounded"
+                value={editingPlan.description}
+                onChange={(e) =>
+                  setEditingPlan({
+                    ...editingPlan,
+                    description: e.target.value,
+                  })
+                }
+              />
+
+              <div className="flex gap-3">
+                <button
+                  className="px-4 py-2 bg-gray-400 text-white rounded"
+                  onClick={() => setEditingPlan(null)}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="px-4 py-2 bg-black text-white rounded"
+                  onClick={handleUpdate}
+                >
+                  Save
+                </button>
+              </div>
+            </>
+          ) : (
+            <p className="text-gray-500">Click edit on a plan to modify it.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

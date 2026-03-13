@@ -1,22 +1,12 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
-
-type RevenuePerPlan = {
-  plan_name: string;
-  revenue: number;
-};
-
-type RevenueReportData = {
-  total_revenue: number;
-  active_plans: number;
-  expired_plans: number;
-  cancelled_plans: number;
-  revenue_per_plan: RevenuePerPlan[];
-};
+import type { RevenueReportData } from "../../types/Revenue";
+import { useSubscription } from "../../context/SubscriptionContext";
 
 const RevenueReport = () => {
   const [report, setReport] = useState<RevenueReportData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { getRevenueReport } = useSubscription();
 
   useEffect(() => {
     fetchReport();
@@ -24,8 +14,8 @@ const RevenueReport = () => {
 
   const fetchReport = async () => {
     try {
-      const res = await API.get("/admin/revenue-report");
-      setReport(res.data);
+      const res = await getRevenueReport();
+      setReport(res);
     } catch (error) {
       console.error("Failed to fetch revenue report", error);
     } finally {
@@ -60,18 +50,31 @@ const RevenueReport = () => {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold">Active Plans</h2>
-          <p className="text-2xl font-bold mt-2">{report.active_plans}</p>
+          <h2 className="text-lg font-semibold">Active Subscriptions</h2>
+          <p className="text-2xl font-bold mt-2">
+            {report.active_subscriptions}
+          </p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold">Expired Plans</h2>
-          <p className="text-2xl font-bold mt-2">{report.expired_plans}</p>
+          <h2 className="text-lg font-semibold">Expired Subscriptions</h2>
+          <p className="text-2xl font-bold mt-2">
+            {report.expired_subscriptions}
+          </p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold">Cancelled Plans</h2>
-          <p className="text-2xl font-bold mt-2">{report.cancelled_plans}</p>
+          <h2 className="text-lg font-semibold">Cancelled Subscriptions</h2>
+          <p className="text-2xl font-bold mt-2">
+            {report.cancelled_subscriptions}
+          </p>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold">Total Subscriptions</h2>
+          <p className="text-2xl font-bold mt-2">
+            {report.total_subscriptions}
+          </p>
         </div>
       </div>
 

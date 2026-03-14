@@ -71,6 +71,7 @@ def active_subscription(db: Session, user_id: int):
         start_date=subscription.start_date,
         end_date=subscription.end_date
     )
+
     
 def revenue_report(db: Session):
     return subscription_repository.revenue_summary(db)

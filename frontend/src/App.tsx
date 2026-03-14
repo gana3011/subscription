@@ -52,7 +52,14 @@ function App() {
           }
         />
 
-        <Route path="/movie/:id" element={<MovieDetails />} />
+        <Route
+          path="/movie/:id"
+          element={
+            <ProtectedRoute>
+              <MovieDetails />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

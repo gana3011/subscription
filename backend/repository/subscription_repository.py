@@ -1,3 +1,5 @@
+from datetime import date
+
 from sqlalchemy.orm import Session
 from models.plan import Plan
 from models.status import SubscriptionStatus
@@ -24,6 +26,14 @@ def cancel_subscription(db: Session, subscription: Subscription):
 
     return subscription
 
+def update_expired_subscription(db: Session):
+    expired_subs = db.query(Subscription).filter(Subscription.end_date < date.today(), Subscription.status == SubscriptionStatus.ACTIVE).all()
+
+    for sub in expired_subs:
+        sub.status = SubscriptionStatus.EXPIRED
+        print("expired", sub)
+    db.commit()
+
 def revenue_summary(db: Session):
     total_revenue = db.query(func.sum(Plan.price)).join(Subscription, Subscription.plan_id == Plan.id).scalar() or 0
 
@@ -48,3 +58,4 @@ def revenue_summary(db: Session):
         for name, revenue in revenue_per_plan
     ]
     }
+

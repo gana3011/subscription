@@ -35,9 +35,20 @@ const Plans = () => {
   }
 
   const handleClick = async (plan_id: number) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     try {
-      if (!activePlanId) await subscribePlan(plan_id);
-      else await changeSubscription(plan_id);
+      if (
+        !activePlanId &&
+        confirm("Are you sure you want to subscribe to this plan?")
+      )
+        await subscribePlan(plan_id);
+      else {
+        if (confirm("Are you sure you want to change to this plan?"))
+          await changeSubscription(plan_id);
+      }
 
       alert("Subscribed successfully");
       navigate("/dashboard");

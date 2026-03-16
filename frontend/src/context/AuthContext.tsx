@@ -12,9 +12,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await API.get("/auth/me", {
-          withCredentials: true,
-        });
+        const res = await API.get("/auth/me");
 
         setUser(res.data);
       } catch (err) {
@@ -28,29 +26,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signup = async (name: string, email: string, password: string) => {
-    const res = await API.post(
-      "/auth/signup",
-      { name, email, password },
-      { withCredentials: true },
-    );
+    const res = await API.post("/auth/signup", { name, email, password });
 
     return res.data;
   };
 
   const login = async (email: string, password: string) => {
-    await API.post(
-      "/auth/login",
-      { email, password },
-      { withCredentials: true },
-    );
+    await API.post("/auth/login", { email, password });
 
-    const res = await API.get("/auth/me", { withCredentials: true });
+    const res = await API.get("/auth/me");
     setUser(res.data);
     return res.data;
   };
 
   const logout = async () => {
-    await API.post("/auth/logout", {}, { withCredentials: true });
+    await API.post("/auth/logout");
     setUser(null);
   };
 

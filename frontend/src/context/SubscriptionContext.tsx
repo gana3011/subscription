@@ -12,7 +12,7 @@ export const SubscriptionProvider = ({
 }) => {
   const getMovies = async () => {
     try {
-      const res = await API.get("/plans/get-movies", { withCredentials: true });
+      const res = await API.get("/plans/get-movies");
 
       return res.data;
     } catch (error: any) {
@@ -31,9 +31,7 @@ export const SubscriptionProvider = ({
 
   const getCurrentPlan = async () => {
     try {
-      const res = await API.get("/subscriptions/active-subscription", {
-        withCredentials: true,
-      });
+      const res = await API.get("/subscriptions/active-subscription");
 
       return res.data;
     } catch (error: any) {
@@ -43,9 +41,7 @@ export const SubscriptionProvider = ({
 
   const getAllPlans = async () => {
     try {
-      const res = await API.get("/plans/get-plans", {
-        withCredentials: true,
-      });
+      const res = await API.get("/plans/get-plans");
 
       return res.data;
     } catch (error: any) {
@@ -55,11 +51,7 @@ export const SubscriptionProvider = ({
 
   const subscribePlan = async (plan_id: number) => {
     try {
-      const res = await API.post(
-        "/subscriptions/create",
-        { plan_id },
-        { withCredentials: true },
-      );
+      const res = await API.post("/subscriptions/create", { plan_id });
 
       return res.data;
     } catch (error: any) {
@@ -69,11 +61,9 @@ export const SubscriptionProvider = ({
 
   const changeSubscription = async (plan_id: number) => {
     try {
-      const res = await API.post(
-        `/subscriptions/change/${plan_id}`,
-        { plan_id },
-        { withCredentials: true },
-      );
+      const res = await API.post(`/subscriptions/change/${plan_id}`, {
+        plan_id,
+      });
 
       return res.data;
     } catch (error: any) {
@@ -83,11 +73,7 @@ export const SubscriptionProvider = ({
 
   const cancelSubscription = async (subscription_id: number) => {
     try {
-      const res = await API.post(
-        `/subscriptions/${subscription_id}/cancel`,
-        {},
-        { withCredentials: true },
-      );
+      const res = await API.post(`/subscriptions/${subscription_id}/cancel`);
       return res.data;
     } catch (error: any) {
       console.error("Error cancelling plan", error);
@@ -96,16 +82,12 @@ export const SubscriptionProvider = ({
 
   const updatePlan = async (plan: Plan) => {
     try {
-      const res = await API.put(
-        `/plans/update/${plan.id}`,
-        {
-          name: plan.name,
-          description: plan.description,
-          price: plan.price,
-          duration_days: plan.duration_days,
-        },
-        { withCredentials: true },
-      );
+      const res = await API.put(`/plans/update/${plan.id}`, {
+        name: plan.name,
+        description: plan.description,
+        price: plan.price,
+        duration_days: plan.duration_days,
+      });
       return res.data;
     } catch (error: any) {
       console.error("Error updating plan", error);
@@ -114,9 +96,7 @@ export const SubscriptionProvider = ({
 
   const getRevenueReport = async () => {
     try {
-      const res = await API.get("/subscriptions/revenue-report", {
-        withCredentials: true,
-      });
+      const res = await API.get("/subscriptions/revenue-report");
       return res.data;
     } catch (error) {
       console.error("Error getting report", error);

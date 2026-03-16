@@ -58,7 +58,7 @@ const Plans = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 p-10">
+    <div className="min-h-screen p-10">
       <h1 className="text-4xl font-bold text-center mb-10">
         Choose Your Subscription Plan
       </h1>

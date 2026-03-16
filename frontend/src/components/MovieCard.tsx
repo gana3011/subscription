@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import type { PlanCardProps } from "../types/Plan";
 
-const PlanCard: React.FC<PlanCardProps> = ({ planName, movies }) => {
+const MovieCard: React.FC<PlanCardProps> = ({ planName, movies }) => {
   return (
     <div className="p-6 rounded-lg w-full max-w-5xl">
       <h2 className="text-2xl font-semibold mb-3 text-center">{planName}</h2>
@@ -31,4 +31,4 @@ const PlanCard: React.FC<PlanCardProps> = ({ planName, movies }) => {
   );
 };
 
-export default PlanCard;
+export default MovieCard;

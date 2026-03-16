@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import PlanCard from "../components/MovieCard";
+import MovieCard from "../components/MovieCard";
 import type { Movie } from "../types/Movie";
 import type { Plan } from "../types/Plan";
 
@@ -44,7 +44,7 @@ const Home = () => {
           );
 
           return (
-            <PlanCard key={plan.id} planName={plan.name} movies={planMovies} />
+            <MovieCard key={plan.id} planName={plan.name} movies={planMovies} />
           );
         })}
       </div>

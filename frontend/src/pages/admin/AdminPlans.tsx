@@ -24,6 +24,7 @@ const AdminPlans = () => {
     if (!editingPlan) return;
     try {
       await updatePlan(editingPlan);
+      alert("Plan updated successfully");
     } catch (err) {
       console.log(err);
     } finally {

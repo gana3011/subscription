@@ -91,7 +91,7 @@ const Plans = () => {
               {isActive ? (
                 <button
                   disabled
-                  className="w-full bg-green-500 text-white py-2 rounded-md cursor-not-allowed"
+                  className="w-full bg-gray-400 text-white py-2 rounded-md cursor-not-allowed"
                 >
                   Subscribed
                 </button>

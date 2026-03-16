@@ -81,17 +81,19 @@ const Dashboard = () => {
         <div className="border border-gray-200 rounded-lg p-5 bg-white shadow-sm">
           <h3 className="mb-2 font-semibold">Next Billing</h3>
           <p>{new Date(subscription.end_date).toLocaleDateString()}</p>
-          <Link to={"/plans"}>
-            <button className="mt-3 px-4 py-2 bg-black text-white rounded-md hover:opacity-90">
-              Upgrade
+          <div className="flex gap-3">
+            <Link to={"/plans"}>
+              <button className="mt-3 px-4 py-2 bg-black text-white rounded-md hover:opacity-90">
+                Upgrade
+              </button>
+            </Link>
+            <button
+              className="mt-3 px-4 py-2 bg-red-800 text-white rounded-md hover:opacity-90"
+              onClick={handleCancel}
+            >
+              Cancel
             </button>
-          </Link>
-          <button
-            className="mt-3 px-4 py-2 bg-red-800 text-white rounded-md hover:opacity-90"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
+          </div>
         </div>
       </div>
     </div>

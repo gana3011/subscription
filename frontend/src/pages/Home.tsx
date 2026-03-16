@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import PlanCard from "../components/PlanCard";
-
-interface Movie {
-  id: number;
-  title: string;
-  image: string;
-  plan_id: number;
-}
-
-interface Plan {
-  id: number;
-  name: string;
-}
+import PlanCard from "../components/MovieCard";
+import type { Movie } from "../types/Movie";
+import type { Plan } from "../types/Plan";
 
 const Home = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -44,12 +34,10 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-200 p-10">
-      <h1 className="text-4xl font-bold text-center mb-10">
-        Movie Subscription Plans
-      </h1>
+    <div className="min-h-screen p-10">
+      <h1 className="text-3xl font-bold text-center">All Plans</h1>
 
-      <div className="flex flex-col items-center gap-10">
+      <div className="flex flex-col items-center">
         {plans.map((plan) => {
           const planMovies = movies.filter(
             (movie) => movie.plan_id === plan.id,

@@ -1,18 +1,7 @@
 import { createContext, useContext } from "react";
 import API from "../services/api";
 import type { Plan } from "../types/Plan";
-
-interface SubscriptionContextType {
-  getMovies: () => Promise<any>;
-  getMovie: (movie_id: number) => Promise<any>;
-  getCurrentPlan: () => Promise<any>;
-  getAllPlans: () => Promise<any>;
-  subscribePlan: (plan_id: number) => Promise<any>;
-  changeSubscription: (plan_id: number) => Promise<any>;
-  cancelSubscription: (subscription_id: number) => Promise<any>;
-  updatePlan: (plan: Plan) => Promise<any>;
-  getRevenueReport: () => Promise<any>;
-}
+import type { SubscriptionContextType } from "../types/Context";
 
 const SubscriptionContext = createContext<SubscriptionContextType | null>(null);
 

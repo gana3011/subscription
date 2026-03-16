@@ -86,7 +86,7 @@ const MovieDetails = () => {
           </button>
         ) : (
           <button
-            className="mt-4 px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="mt-4 px-5 py-2 bg-black text-white rounded-md "
             onClick={() => navigate("/plans")}
           >
             Upgrade Plan

@@ -19,7 +19,7 @@ const MovieCard: React.FC<PlanCardProps> = ({ planName, movies }) => {
                 <img
                   src={movie.image}
                   alt={movie.title}
-                  className="w-full h-[260px] object-cover"
+                  className="w-full h-[260px] object-contain"
                 />
                 <h3 className="py-2 font-semibold">{movie.title}</h3>
               </Link>

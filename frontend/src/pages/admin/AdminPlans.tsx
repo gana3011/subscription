@@ -34,7 +34,7 @@ const AdminPlans = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen p-10">
       <h1 className="text-3xl font-bold mb-8">Admin - Manage Plans</h1>
 
       <div className="grid grid-cols-2 gap-10">
